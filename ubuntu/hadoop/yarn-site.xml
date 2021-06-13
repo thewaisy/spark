@@ -1,0 +1,22 @@
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+        <description>맵리듀스 사용</description>
+    </property>
+    <property>
+        <name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+        <description>맵리듀스 작동 참고</description>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.hostname</name>
+        <value>hadoop1</value>
+        <description>resource manager를 마스터 서버에 설정</description>
+    </property>
+    <property>
+        <name>yarn.web-proxy.address</name>
+        <value>hadoop1:8088</value>
+        <description>yarn 클러스터 웹으로 확인설정</description>
+    </property>
+</configuration>

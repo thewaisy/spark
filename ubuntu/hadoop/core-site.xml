@@ -1,0 +1,12 @@
+<configuration>
+    <property>
+        <name>fs.default.name</name>
+        <!--하둡 master 서버 설정-->
+        <value>hdfs://hadoop1:9000</value>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <!--임의의 데이터 저장 경로 설정-->
+        <value>/apps/hadoop/hdfs/pids</value>
+    </property>
+</configuration>

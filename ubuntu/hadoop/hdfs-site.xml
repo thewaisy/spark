@@ -1,0 +1,32 @@
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+        <description>slave 서버 개수 지정</description>
+    </property>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/apps/hadoop/hdfs/namenode</value>
+        <description>master 서버 데이터 저장 경로 지정</description>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/apps/hadoop/hdfs/datanode</value>
+        <description>slave 서버 데이터 저장 경로 저장</description>
+    </property>
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+        <description>웹서버로 확인 허락 여부 설정</description>
+    </property>
+    <property>
+        <name>dfs.http.address</name>
+        <value>hadoop1:50090</value>
+        <description>웹서버로 확인 할 수 있도록 지정</description>
+    </property>
+<!--    <property>-->
+<!--        <name>dfs.namenode.secondary.http-address</name>-->
+<!--        <value>hadoop2:50070</value>-->
+<!--        <description>secondary 서버 웹으로 확인 가능</description>-->
+<!--    </property>-->
+</configuration>

@@ -1,0 +1,7 @@
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+        <description>master 서버와 slave서버 작업 가능</description>
+    </property>
+</configuration>
