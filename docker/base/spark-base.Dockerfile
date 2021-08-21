@@ -12,6 +12,8 @@ ARG SCALA_VERSION
 #ENV SCALA_VERSION=2.12.4
 ENV SCALA_HOME=/usr/share/scala
 ENV SPARK_HOME=/spark
+ENV SPARK_CONF_DIR=$SPARK_HOME/conf
+ENV YARN_CONF_DIR=$SPARK_CONF_DIR
 
 COPY ./requirements.txt /requirements.txt
 
@@ -53,7 +55,7 @@ RUN wget --no-verbose http://apache.mirror.cdnetworks.com/spark/spark-${SPARK_VE
 RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.47/mysql-connector-java-5.1.47.jar -O ${SPARK_HOME}/jars/mysql-connector-java-5.1.47.jar
 
 # add presto jar
-RUN wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.248/presto-jdbc-0.248.jar -O ${SPARK_HOME}/jars/presto-jdbc-0.248.jar
+RUN wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.257/presto-jdbc-0.257.jar -O ${SPARK_HOME}/jars/presto-jdbc-0.257.jar
 
 
 # Fix the value of PYTHONHASHSEED

@@ -1,5 +1,6 @@
+ARG BASE_IMAGE
 ARG SPARK_VERSION
-FROM hanyoon1108/spark-base:${SPARK_VERSION}
+FROM $BASE_IMAGE
 
 COPY spark-submit.sh /
 
