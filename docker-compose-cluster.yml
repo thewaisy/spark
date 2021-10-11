@@ -18,7 +18,7 @@ services:
     <<: *spark-common
     container_name: spark-master
     hostname: spark-master
-    image: waisy/spark-master:3.1.2-v1
+    image: waisy/spark-master:3.1.2-v2
     ports:
       - "9090:8080"
       - "7077:7077"
@@ -29,7 +29,7 @@ services:
     <<: *spark-common
     container_name: spark-worker-1
     hostname: spark-worker-1
-    image: waisy/spark-worker:3.1.2-v1
+    image: waisy/spark-worker:3.1.2-v2
     depends_on:
       - spark-master
     ports:
@@ -46,7 +46,7 @@ services:
     <<: *spark-common
     container_name: spark-worker-2
     hostname: spark-worker-2
-    image: waisy/spark-worker:3.1.2-v1
+    image: waisy/spark-worker:3.1.2-v2
     depends_on:
       - spark-master
     ports:
@@ -105,7 +105,7 @@ services:
 
   jupyterlab:
     <<: *spark-common
-    image: waisy/jupyterlab:3.1.2-v1
+    image: waisy/jupyterlab:3.1.2-v2
     container_name: jupyterlab
     ports:
       - "8888:8888"
