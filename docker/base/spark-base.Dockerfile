@@ -7,6 +7,8 @@ ENV DAEMON_RUN=true
 ARG SPARK_VERSION
 ARG HADOOP_VERSION
 ARG SCALA_VERSION
+ARG PYTHON_VERSION
+ARG PYTHON_VER
 #ENV SPARK_VERSION=3.0.2
 #ENV HADOOP_VERSION=2.7
 #ENV SCALA_VERSION=2.12.4
@@ -16,9 +18,9 @@ ENV SPARK_HOME='/spark'
 ENV SPARK_CONF_DIR='${SPARK_HOME}/conf'
 ENV YARN_CONF_DIR=$SPARK_CONF_DIR
 
-COPY ./requirements.txt /requirements.txt
 
-RUN apt-get update && apt-get install -y curl vim wget software-properties-common ssh net-tools ca-certificates jq
+RUN apt-get update && apt-get install -y build-essential curl vim wget ssh net-tools ca-certificates jq
+# apt-get install software-properties-common -> python3.9 꼬임
 
 # scala install
 RUN cd "/tmp" && \
@@ -30,13 +32,26 @@ RUN cd "/tmp" && \
     ln -s "${SCALA_HOME}/bin/"* "/usr/bin/" && \
     rm -rf "/tmp/"*
 
-# install python 3.8
+# install python
 # Add Dependencies for PySpark
-RUN apt-get install -y python3 python3-pip python3-numpy python3-matplotlib python3-scipy python3-pandas python3-simpy
-RUN update-alternatives --install "/usr/bin/python" "python" "$(which python3)" 1
+RUN apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev \
+    libsqlite3-dev libreadline-dev libffi-dev libbz2-dev liblzma-dev libfreetype6-dev pkg-config
 
-RUN pip3 install --upgrade pip && \
-    pip3 install -r requirements.txt
+RUN wget "https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz" -P /opt && \
+    tar -xvf /opt/Python-$PYTHON_VERSION.tar.xz -C /opt && \
+    cd /opt/Python-$PYTHON_VERSION && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    update-alternatives --install /usr/bin/python python /usr/local/bin/python$PYTHON_VER 1 && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python$PYTHON_VER 1 && \
+    update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip$PYTHON_VER 1 && \
+    update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip$PYTHON_VER 1 && \
+    cd /
+
+
+COPY ./requirements.txt /requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 #Scala instalation
 RUN export PATH="/usr/local/sbt/bin:$PATH" && \
