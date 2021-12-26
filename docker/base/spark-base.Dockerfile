@@ -1,7 +1,7 @@
 FROM openjdk:8-jre-slim
 
 LABEL author="hanyoon" email="mit2011@naver.com"
-LABEL version="0.1"
+LABEL version="v2"
 
 ENV DAEMON_RUN=true
 ARG SPARK_VERSION
@@ -10,9 +10,10 @@ ARG SCALA_VERSION
 #ENV SPARK_VERSION=3.0.2
 #ENV HADOOP_VERSION=2.7
 #ENV SCALA_VERSION=2.12.4
-ENV SCALA_HOME=/usr/share/scala
-ENV SPARK_HOME=/spark
-ENV SPARK_CONF_DIR=$SPARK_HOME/conf
+ENV SPARK_MASTER_HOST='spark-master'
+ENV SCALA_HOME='/usr/share/scala'
+ENV SPARK_HOME='/spark'
+ENV SPARK_CONF_DIR='${SPARK_HOME}/conf'
 ENV YARN_CONF_DIR=$SPARK_CONF_DIR
 
 COPY ./requirements.txt /requirements.txt
@@ -55,7 +56,7 @@ RUN wget --no-verbose http://apache.mirror.cdnetworks.com/spark/spark-${SPARK_VE
 RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.47/mysql-connector-java-5.1.47.jar -O ${SPARK_HOME}/jars/mysql-connector-java-5.1.47.jar
 
 # add presto jar
-RUN wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.257/presto-jdbc-0.257.jar -O ${SPARK_HOME}/jars/presto-jdbc-0.257.jar
+RUN wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.266.1/presto-jdbc-0.266.1.jar -O ${SPARK_HOME}/jars/presto-jdbc-0.257.jar
 
 
 # Fix the value of PYTHONHASHSEED

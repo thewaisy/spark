@@ -57,3 +57,10 @@ docker build \
     --build-arg SPARK_VERSION=$SPARK_VERSION \
     --build-arg jupyterlab_version=$JUPYTERLAB_VERSION \
     ./jupyterlab
+
+# docker push
+docker push $DOCKER_USER/spark-base:$TAG_VERSION
+docker push $DOCKER_USER/spark-master:$TAG_VERSION
+docker push $DOCKER_USER/spark-worker:$TAG_VERSION
+docker push $DOCKER_USER/spark-submit:$TAG_VERSION
+docker push $DOCKER_USER/jupyterlab:$TAG_VERSION
