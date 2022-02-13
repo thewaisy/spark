@@ -21,6 +21,7 @@ services:
     image: waisy/spark-master:3.1.2-v2
     ports:
       - "9090:8080"
+      - "4040:4040"
       - "7077:7077"
     environment:
       - "SPARK_LOCAL_IP=spark-master"
