@@ -1,7 +1,7 @@
 FROM openjdk:8-jre-slim
 
 LABEL author="hanyoon" email="mit2011@naver.com"
-LABEL version="0.1"
+LABEL version="v4"
 
 ENV DAEMON_RUN=true
 ARG SPARK_VERSION
@@ -31,11 +31,33 @@ RUN cd "/tmp" && \
 
 # install python 3.8
 # Add Dependencies for PySpark
-RUN apt-get install -y python3 python3-pip python3-numpy python3-matplotlib python3-scipy python3-pandas python3-simpy
-RUN update-alternatives --install "/usr/bin/python" "python" "$(which python3)" 1
+RUN apt-get install -y build-essential checkinstall && \
+    apt-get install -y libncursesw5-dev \
+    libssl-dev \
+    libsqlite3-dev \
+    tk-dev \
+    libgdbm-dev \
+    libc6-dev \
+    libbz2-dev \
+    libffi-dev \
+    zlib1g-dev \
+    liblzma-dev
 
-RUN pip3 install --upgrade pip && \
-    pip3 install -r requirements.txt
+RUN wget https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tar.xz -O /opt/Python-3.8.12.tar.xz && \
+    tar -xvf /opt/Python-3.8.12.tar.xz -C /opt && \
+    cd /opt/Python-3.8.12 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    update-alternatives --install /usr/bin/python python /usr/local/bin/python3.8 1 && \
+    update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip3.8 1 && \
+    cd /
+
+
+# RUN apt-get install -y python3 python3-pip python3-numpy python3-matplotlib python3-scipy python3-pandas python3-simpy
+# RUN update-alternatives --install "/usr/bin/python" "python" "$(which python3)" 1
+
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 #Scala instalation
 RUN export PATH="/usr/local/sbt/bin:$PATH" && \
@@ -51,12 +73,22 @@ RUN wget --no-verbose http://apache.mirror.cdnetworks.com/spark/spark-${SPARK_VE
     mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
-# add mysql jar
-RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.47/mysql-connector-java-5.1.47.jar -O ${SPARK_HOME}/jars/mysql-connector-java-5.1.47.jar
-
-# add presto jar
-RUN wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.257/presto-jdbc-0.257.jar -O ${SPARK_HOME}/jars/presto-jdbc-0.257.jar
-
+# add jar
+# mysql
+# presto
+# aws-java-sdk-bundle
+# hadoop-aws
+# hive-metastore
+RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.47/mysql-connector-java-5.1.47.jar \
+        -O ${SPARK_HOME}/jars/mysql-connector-java-5.1.47.jar && \
+    wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.257/presto-jdbc-0.257.jar \
+        -O ${SPARK_HOME}/jars/presto-jdbc-0.257.jar && \
+    wget https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.167/aws-java-sdk-bundle-1.12.167.jar \
+        -O ${SPARK_HOME}/jars/aws-java-sdk-bundle-1.12.167.jar && \
+    wget https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.2/hadoop-aws-3.2.2.jar \
+        -O ${SPARK_HOME}/jars/hadoop-aws-3.2.2.jar && \
+    wget https://repo1.maven.org/maven2/org/apache/hive/hive-metastore/3.0.0/hive-metastore-3.0.0.jar \
+        -O ${SPARK_HOME}/jars/hive-metastore-3.0.0.jar
 
 # Fix the value of PYTHONHASHSEED
 # Note: this is needed when you use Python 3.3 or greater

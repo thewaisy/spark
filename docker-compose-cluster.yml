@@ -11,6 +11,7 @@ x-spark-common:
   volumes:
     - ./apps/jupyter:/jupyter
     - ~/data:/data
+    - ~/.aws:/root/.aws
   restart: always
 
 services:
@@ -18,51 +19,52 @@ services:
     <<: *spark-common
     container_name: spark-master
     hostname: spark-master
-    image: waisy/spark-master:3.1.2-v2
+    image: waisy/spark-master:3.1.2-${VERSION}
     ports:
       - "9090:8080"
       - "4040:4040"
       - "7077:7077"
     environment:
       - "SPARK_LOCAL_IP=spark-master"
+      - SPARK_DRIVER_MEMORY=2g
 
   spark-worker-1:
     <<: *spark-common
     container_name: spark-worker-1
     hostname: spark-worker-1
-    image: waisy/spark-worker:3.1.2-v2
+    image: waisy/spark-worker:3.1.2-${VERSION}
     depends_on:
       - spark-master
     ports:
       - "8081:8080"
     environment:
       - SPARK_MASTER=spark://spark-master:7077
-      - SPARK_WORKER_CORES=1
-      - SPARK_WORKER_MEMORY=1g
-      - SPARK_DRIVER_MEMORY=128m
-      - SPARK_EXECUTOR_MEMORY=1g
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=3g
+      - SPARK_DRIVER_MEMORY=1g
+      - SPARK_EXECUTOR_MEMORY=2g-com  
 #      - SPARK_EXECUTOR_MEMORY=256m
 
   spark-worker-2:
     <<: *spark-common
     container_name: spark-worker-2
     hostname: spark-worker-2
-    image: waisy/spark-worker:3.1.2-v2
+    image: waisy/spark-worker:3.1.2-${VERSION}
     depends_on:
       - spark-master
     ports:
       - "8082:8080"
     environment:
       - SPARK_MASTER=spark://spark-master:7077
-      - SPARK_WORKER_CORES=1
-      - SPARK_WORKER_MEMORY=1g
-      - SPARK_DRIVER_MEMORY=128m
-      - SPARK_EXECUTOR_MEMORY=1g
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=3g
+      - SPARK_DRIVER_MEMORY=1g
+      - SPARK_EXECUTOR_MEMORY=2g
 #      - SPARK_EXECUTOR_MEMORY=256m
 
   jupyterlab:
     <<: *spark-common
-    image: waisy/jupyterlab:3.1.2-v2
+    image: waisy/jupyterlab:3.1.2-${VERSION}
     container_name: jupyterlab
     ports:
       - "8888:8888"
